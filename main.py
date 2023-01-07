@@ -24,18 +24,23 @@ while True:
             for id,lm in enumerate(oneHand.landmark):
                 cx,cy = int(lm.x*w), int(lm.y*h)
                 lmList.append({"id":id,"x":cx,"y":cy,"dx":lm.x,"dy":lm.y})
+                if id in [4,8,12,16,20]:
+                    cv.circle(img,(cx,cy), 15,(255,id*10,0), cv.FILLED)
+                    cv.putText(img,f"{cx},{cy}",(cx+15,cy-10), cv.FONT_HERSHEY_DUPLEX ,.5,(0,0,255),1)
+            
+            cv.putText(img,f"Hand {results.multi_hand_landmarks.index(oneHand)}",(lmList[0]['x']+15,lmList[0]['y']-10), cv.FONT_HERSHEY_DUPLEX ,.5,(0,255,255),1)
 
 
             if lmList[0]["dy"] < 0.7:
                 f1=lmList[4]
                 f2=lmList[8]
 
-                cv.circle(img,(f1["x"],f1["y"]), 15,(255,255,0), cv.FILLED)
-                cv.putText(img,f"{f1['x']},{f1['y']}",(f1['x']+15,f1['y']), cv.FONT_HERSHEY_DUPLEX ,.5,(0,255,200),1)
-                cv.circle(img,(f2["x"],f2["y"]), 15,(255,150,0), cv.FILLED)
-                cv.putText(img,f"{f2['x']},{f2['y']}",(f2['x']+15,f2['y']), cv.FONT_HERSHEY_DUPLEX ,.5,(0,255,200),1)
+                # cv.circle(img,(f1["x"],f1["y"]), 15,(255,255,0), cv.FILLED)
+                # cv.putText(img,f"{f1['x']},{f1['y']}",(f1['x']+15,f1['y']), cv.FONT_HERSHEY_DUPLEX ,.5,(0,255,200),1)
+                # cv.circle(img,(f2["x"],f2["y"]), 15,(255,150,0), cv.FILLED)
+                # cv.putText(img,f"{f2['x']},{f2['y']}",(f2['x']+15,f2['y']), cv.FONT_HERSHEY_DUPLEX ,.5,(0,255,200),1)
                 
-                if abs(f1['x']-f2['x'])+ abs(f1['y']-f2['y'])<45:
+                if abs(f1['x']-f2['x'])+ abs(f1['y']-f2['y'])<40:
                     print("SUCCESS")
                 
                 # if (id== 0 and lm.y <0.5):

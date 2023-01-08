@@ -1,5 +1,5 @@
 # Hey there
-I'll fill this up when i finish the actual project. thank you for your patience.
+I'll fill this up when i finish the actual project.
 # Setup
 
 # Showcase 

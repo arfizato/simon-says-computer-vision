@@ -17,14 +17,14 @@ class HandCam:
         
         self.gestures=[
             {"name":"noHands",  "img":r"./img/empty.png",   "type":"standard",  "fingersUp":[4,8,12,16,20],     "fingersColliding":[] },
-            {"name":"1",        "img":r"./img/1.png",       "type":"standard",  "fingersUp":[8],     "fingersColliding":[4,12,16,20]},
-            {"name":"2",        "img":r"./img/2.png",       "type":"standard",  "fingersUp":[8,12],     "fingersColliding":[4,16,20]},
-            {"name":"3",        "img":r"./img/3.png",       "type":"standard",  "fingersUp":[8,12,16],     "fingersColliding":[4,20]},
-            {"name":"4",        "img":r"./img/4.png",       "type":"standard",  "fingersUp":[8,12,16,20],     "fingersColliding":[4,13]},
+            {"name":"1",        "img":r"./img/1.png",       "type":"standard",  "fingersUp":[8],                "fingersColliding":[4,12,16,20]},
+            {"name":"2",        "img":r"./img/2.png",       "type":"standard",  "fingersUp":[8,12],             "fingersColliding":[4,16,20]},
+            {"name":"3",        "img":r"./img/3.png",       "type":"standard",  "fingersUp":[8,12,16],          "fingersColliding":[4,20]},
+            {"name":"4",        "img":r"./img/4.png",       "type":"standard",  "fingersUp":[8,12,16,20],       "fingersColliding":[4,13]},
             {"name":"5",        "img":r"./img/5.png",       "type":"standard",  "fingersUp":[4,8,12,16,20],     "fingersColliding":[4,5]},
-            {"name":"ok",       "img":r"./img/ok.png",      "type":"standard",  "fingersUp":[12,16,20],     "fingersColliding":[4,8]},
-            {"name":"rock",     "img":r"./img/rock.png",    "type":"standard",  "fingersUp":[8,20],     "fingersColliding":[4,12,16]},
-            {"name":"gangang",  "img":r"./img/gangang.png", "type":"standard",  "fingersUp":[8,12,20],     "fingersColliding":[4,16]}
+            {"name":"ok",       "img":r"./img/ok.png",      "type":"standard",  "fingersUp":[12,16,20],         "fingersColliding":[4,8]},
+            {"name":"rock",     "img":r"./img/rock.png",    "type":"standard",  "fingersUp":[8,20],             "fingersColliding":[4,12,16]},
+            {"name":"gangang",  "img":r"./img/gangang.png", "type":"standard",  "fingersUp":[8,12,20],          "fingersColliding":[4,16]}
         ]
         self.selectedGesture= 0
         self.imageIconPath= r"./img/empty.png"

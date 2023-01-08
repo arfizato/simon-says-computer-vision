@@ -142,8 +142,8 @@ def main():
         ptime= ctime
 
         cv.putText(img,str(int(fps)),(10,30), cv.FONT_HERSHEY_DUPLEX ,1,(0,255,255),2)
-        cv.putText(img,"Give me a high five to start",(200,20), cv.FONT_HERSHEY_DUPLEX ,.5,(50,0,0),1,bottomLeftOrigin=False)
-        cv.putText(img,"Press any key to close",(230,40), cv.FONT_HERSHEY_DUPLEX ,.5,(50,0,0),1,bottomLeftOrigin=False)
+        cv.putText(img,"Give me a high five to start",(200,20), cv.FONT_HERSHEY_DUPLEX ,.5,(50,50,0),1,bottomLeftOrigin=False)
+        cv.putText(img,"Press any key to close",(230,40), cv.FONT_HERSHEY_DUPLEX ,.5,(50,50,0),1,bottomLeftOrigin=False)
         cv.imshow("Image",img)
         if cv.waitKey(1)>-1:
             break

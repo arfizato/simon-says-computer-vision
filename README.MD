@@ -3,6 +3,7 @@ I'll fill this up when i finish the actual project. thank you for your patience.
 # Setup
 
 # Showcase 
+
 <img src="./img/showcase.gif">
 
 # Attribution 

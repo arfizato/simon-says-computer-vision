@@ -2,7 +2,7 @@ import cv2 as cv
 import mediapipe as mp
 import time
 import random
-from threading import Timer
+from threading import Timer # https://stackoverflow.com/a/3433565/18027442
 
 class HandCam:
     def __init__(self,staticMode=False,maxHands=2,detectionConfidence=0.5,trackingConfidence=0.5):
@@ -46,7 +46,7 @@ class HandCam:
         return img
 
     def waitToSelectGesture(self):
-        self.selectedGesture= random.randint(0,len(self.gestures)-1)
+        self.selectedGesture= random.randint(1,len(self.gestures)-1)
         self.imageIconPath= self.gestures[self.selectedGesture]["img"]
 
     def verifyGesture(self,img, lmList, draw=True):
@@ -58,7 +58,8 @@ class HandCam:
             yfinger= [b["y"] for b in lmList[a-3:a+1]]
             if min(yfinger)!=yfinger[-1] or min(yfinger[:-1])!=yfinger[-2] or min(yfinger[:-2])!=yfinger[-3]:# or max(yfinger[:-1])!=yfinger[-2] 
                 for node in lmList[a-3:a+1]:
-                    cv.putText(img,f"{node['y']}",(node['x']+15,node['y']-10), cv.FONT_HERSHEY_DUPLEX ,.3,(255,255,0),1)
+                    if draw:
+                        cv.putText(img,f"{node['y']}",(node['x']+15,node['y']-10), cv.FONT_HERSHEY_DUPLEX ,.3,(255,255,0),1)
                 posIsCorrect=False
                 break
         # ----------------------------- fingers colliding ---------------------------- #
@@ -66,7 +67,7 @@ class HandCam:
         fingersAreColliding= True
         for i,finger in enumerate( [yy for yy in collidingfiners]):
             fingerDoesCollide=False
-            if int(time.time())> self.waitUntil+.5:
+            if (time.time())> self.waitUntil+.5:
                 for ii,fingerTip in enumerate(collidingfiners):
                     if abs(finger["x"] - fingerTip["x"])<=15 and abs(finger["y"] - fingerTip["y"])<=15 and i!=ii: 
                         fingerDoesCollide= True
@@ -74,26 +75,14 @@ class HandCam:
             if not fingerDoesCollide:
                 fingersAreColliding=False
                 break
-                
-        # collidingfiners=[lmList[a] for a in g["fingersColliding"]]
-        # correctPosition= True
-        # for a in  [yy for yy in collidingfiners]:
-        #     finger= collidingfiners.pop(0)
-        #     if len(collidingfiners)>0:
-        #         for fingerTip in collidingfiners:
-        #             if abs(finger["x"] - fingerTip["x"])>15 or abs(finger["y"] - fingerTip["y"])>15 : 
-        #                 correctPosition= False
-        #                 break
-        #         if not correctPosition:
-        #             break
         # ----------------------------- checking booleans ---------------------------- #
-        if fingersAreColliding:
+        if fingersAreColliding and (time.time())> self.waitUntil+.5:
             if posIsCorrect:    
-                print("SUCCESS")
+                print(f"SUCCESS Gesture[{self.selectedGesture}]: {self.gestures[self.selectedGesture]['name']} " )
                 self.imageIconPath=r"./img/empty.png"
                 # time.sleep(2)
-                self.waitUntil= int(time.time())+2
-                t= Timer(2,self.waitToSelectGesture)
+                self.waitUntil= int(time.time())+1
+                t= Timer(1,self.waitToSelectGesture)
                 t.start()
             else: 
                 print(a,min(yfinger),yfinger[-1], yfinger)
@@ -102,17 +91,18 @@ class HandCam:
     def findPos(self,img,draw=True):
         h,w,c = img.shape
         if self.results.multi_hand_landmarks:
-            for oneHand in self.results.multi_hand_landmarks:
-                lmList=list()
-                for id,lm in enumerate(oneHand.landmark):
-                    cx,cy = int(lm.x*w), int(lm.y*h)
-                    lmList.append({"id":id,"x":cx,"y":cy,"dx":lm.x,"dy":lm.y})
-                    if id in [4,8,12,16,20] and draw:
-                        cv.circle(img,(cx,cy), 15,(255,id*10,0), cv.FILLED)
-                        cv.putText(img,f"{cx},{cy}",(cx+15,cy-10), cv.FONT_HERSHEY_DUPLEX ,.5,(0,0,255),1)
-                if draw:
-                    cv.putText(img,f"Hand {self.results.multi_hand_landmarks.index(oneHand)}",(lmList[0]['x']+15,lmList[0]['y']-10), cv.FONT_HERSHEY_DUPLEX ,.5,(0,255,255),1)
-                img = self.verifyGesture(img,lmList,draw)
+            oneHand = self.results.multi_hand_landmarks[0]
+
+            lmList=list()
+            for id,lm in enumerate(oneHand.landmark):
+                cx,cy = int(lm.x*w), int(lm.y*h)
+                lmList.append({"id":id,"x":cx,"y":cy,"dx":lm.x,"dy":lm.y})
+                if id in [4,8,12,16,20] and draw:
+                    cv.circle(img,(cx,cy), 15,(255,id*10,0), cv.FILLED)
+                    cv.putText(img,f"{cx},{cy}",(cx+15,cy-10), cv.FONT_HERSHEY_DUPLEX ,.5,(0,0,255),1)
+            if draw:
+                cv.putText(img,f"Hand {self.results.multi_hand_landmarks.index(oneHand)}",(lmList[0]['x']+15,lmList[0]['y']-10), cv.FONT_HERSHEY_DUPLEX ,.5,(0,255,255),1)
+            img = self.verifyGesture(img,lmList,draw)
         return img
 
                     
@@ -152,6 +142,8 @@ def main():
         ptime= ctime
 
         cv.putText(img,str(int(fps)),(10,30), cv.FONT_HERSHEY_DUPLEX ,1,(0,255,255),2)
+        cv.putText(img,"Give me a high five to start",(200,20), cv.FONT_HERSHEY_DUPLEX ,.5,(50,0,0),1,bottomLeftOrigin=False)
+        cv.putText(img,"Press any key to close",(230,40), cv.FONT_HERSHEY_DUPLEX ,.5,(50,0,0),1,bottomLeftOrigin=False)
         cv.imshow("Image",img)
         if cv.waitKey(1)>-1:
             break
